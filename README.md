@@ -8,6 +8,30 @@ This file is the tech-stack decision, researched 2026-10-19. Nothing is built ye
 The bar is "a skilled editor with taste", not "a beat-synced slideshow". The
 three sections marked **(quality)** are what separate the two.
 
+## Setup
+
+```bash
+./setup.sh
+```
+Pop!_OS / Ubuntu / Debian and macOS natively; Windows 11 inside a WSL2 Ubuntu
+shell. The script installs ffmpeg and wget from the system package manager,
+installs `uv`, creates `.venv` once (Python 3.12, downloaded if the system lacks
+it), installs `requirements.txt`, and ends with a doctor check that prints
+versions, the torch device, and any missing ffmpeg filters. Re-running only
+checks; nothing is rebuilt. On Linux without an NVIDIA GPU it pulls the CPU torch
+wheel to skip a 2.5 GB download.
+
+Platform swaps, handled by markers in `requirements.txt` and at runtime:
+
+| | Apple Silicon | Linux / WSL2 |
+|---|---|---|
+| Transcription | mlx-whisper | faster-whisper (CTranslate2, CUDA or CPU int8) |
+| torch device | MPS | CUDA if `nvidia-smi` exists, else CPU |
+| Draft encoder | `hevc_videotoolbox` | `h264_nvenc`, `h264_vaapi`, else `libx264 -preset ultrafast` |
+
+The local VLM option (mlx-vlm) is Mac-only; on Linux the same role goes to
+Qwen3-VL through Ollama or vLLM if it is ever needed.
+
 ## The one idea everything hangs on
 
 **Claude never watches video. It reads video.** Every tool below turns pixels and

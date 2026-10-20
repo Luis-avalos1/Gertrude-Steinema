@@ -1,0 +1,14 @@
+# Core for milestones M1–M2. Later milestones add (when needed, not before):
+#   open_clip_torch aesthetic-predictor-v2-5 transnetv2-pytorch allin1 color-matcher vidstab opentimelineio mlx-vlm
+numpy
+scenedetect
+opencv-python-headless
+librosa
+soundfile
+torch
+beat-this
+pillow
+panns-inference
+# transcription: MLX on Apple Silicon, CTranslate2 everywhere else
+mlx-whisper; sys_platform == "darwin" and platform_machine == "arm64"
+faster-whisper; sys_platform != "darwin" or platform_machine != "arm64"

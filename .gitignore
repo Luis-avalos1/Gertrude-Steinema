@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+# media and generated files stay out of git
+clips/
+music/
+reference/
+analysis/
+out/
+sfx/
